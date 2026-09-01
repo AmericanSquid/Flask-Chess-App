@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>{% block title %}The Court of Crowns & Castles{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+    {% block head %}{% endblock %}
+</head>
+<body>
+    <header class="site-header">
+        <div>
+            <a class="brand" href="{{ url_for('games.dashboard') }}">♟ The Court of Crowns & Castles</a>
+        </div>
+        {% if current_user.is_authenticated %}
+            <div class="header-actions">
+                <span class="user-chip">{{ current_user.get_display_name() }}</span>
+                <form method="post" action="{{ url_for('auth.logout') }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button type="submit">Log out</button>
+                </form>
+            </div>
+        {% endif %}
+    </header>
+
+    <main class="page-shell">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <section class="flash-stack">
+                    {% for category, message in messages %}
+                        <div class="flash flash-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </section>
+            {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </main>
+    <audio id="bg-music" loop>
+      <source src="{{ url_for('static', filename='audio/tavern.mp3') }}" type="audio/mpeg">
+    </audio>
+
+    <button id="music-toggle" onclick="toggleMusic()">🔊</button>
+</body>
+</html>
+<script>
+const audio = document.getElementById("bg-music");
+const btn = document.getElementById("music-toggle");
+
+// set cozy volume
+audio.volume = 1.0;
+
+// restore state if previously played
+if (localStorage.getItem("musicPlaying") === "true") {
+    audio.play().catch(() => {});
+    btn.textContent = "🔊";
+} else {
+    btn.textContent = "🔇";
+}
+
+function toggleMusic() {
+    if (audio.paused) {
+        audio.play();
+        btn.textContent = "🔊";
+        localStorage.setItem("musicPlaying", "true");
+    } else {
+        audio.pause();
+        btn.textContent = "🔇";
+        localStorage.setItem("musicPlaying", "false");
+    }
+}
+</script>

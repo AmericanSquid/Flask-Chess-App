@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Choose User · Flask Chess{% endblock %}
+{% block content %}
+<section class="panel narrow">
+    <h1>Choose a seeded user</h1>
+    <p>Pick one of the seeded players to start a session.</p>
+
+    <div class="user-grid">
+        {% for user in users %}
+            <form method="post" action="{{ url_for('auth.login_post') }}" class="user-card">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <input type="hidden" name="username" value="{{ user.username }}">
+                <h2>{{ user.get_display_name() }}</h2>
+                <p>@{{ user.username }}</p>
+                <button type="submit">Sign in</button>
+            </form>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

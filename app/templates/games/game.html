@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% block title %}Game #{{ game.id }} · {{ initial_state.players.white }} vs {{ initial_state.players.black }}{% endblock %}
+{% block content %}
+<section class="game-shell">
+    <article class="panel board-panel">
+        </div>
+
+        <div id="status-banner" class="status-banner"></div>
+
+        <div class="board-wrap">
+            <div id="board" class="board" aria-label="Chess board"></div>
+        </div>
+
+        <div class="board-actions">
+            <button id="claim-draw-button" type="button">Claim draw</button>
+            <span id="sync-indicator" class="muted">Synced</span>
+        </div>
+    </article>
+
+    <aside class="sidebar-stack" aria-label="Game sidebar">
+        <section class="panel chat-panel" aria-labelledby="chat-heading">
+            <div class="panel-heading">
+                <h2 id="chat-heading">Chat</h2>
+                <p class="panel-kicker">Live game chat</p>
+            </div>
+
+            <div id="chat-messages" class="chat-messages" aria-live="polite"></div>
+            <p id="chat-status" class="muted chat-status" aria-live="polite"></p>
+
+            <div class="chat-compose">
+                <input
+                    id="chat-input"
+                    name="body"
+                    type="text"
+                    maxlength="500"
+                    placeholder="Type a message..."
+                    autocomplete="off"
+                />
+                <button id="chat-send-button" type="button">Send</button>
+            </div>
+        </section>
+
+        <details class="panel disclosure-panel" open>
+            <summary>
+                <span>Move history</span>
+                <span class="summary-meta">Current game</span>
+            </summary>
+            <div class="panel-body move-history-body">
+                <ol id="move-list" class="move-list"></ol>
+            </div>
+        </details>
+
+        <details class="panel disclosure-panel" id="leaderboard-panel">
+            <summary>
+                <span>Leaderboard</span>
+                <span class="summary-meta">Overall standings</span>
+            </summary>
+            <div class="panel-body leaderboard-body-wrap">
+                <div id="leaderboard-body">{% include "partials/leaderboard.html" %}</div>
+            </div>
+        </details>
+    </aside>
+</section>
+
+<div id="promotion-modal" class="modal hidden" aria-hidden="true">
+    <div class="modal-card">
+        <h3>Choose promotion</h3>
+        <div class="promotion-grid">
+            <button type="button" data-promotion="q">Queen</button>
+            <button type="button" data-promotion="r">Rook</button>
+            <button type="button" data-promotion="b">Bishop</button>
+            <button type="button" data-promotion="n">Knight</button>
+            <button type="button" data-promotion="">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<script id="initial-state" type="application/json">{{ initial_state | tojson }}</script>
+<script>
+    window.FLASK_CHESS = {
+        gameId: {{ game.id }},
+        currentUserId: {{ current_user.id }},
+        pollIntervalMs: {{ poll_interval_ms }}
+    };
+</script>
+<script type="module" src="{{ url_for('static', filename='js/game-page.js') }}"></script>
+{% endblock %}

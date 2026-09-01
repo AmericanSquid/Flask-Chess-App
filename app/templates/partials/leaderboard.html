@@ -1,0 +1,26 @@
+<table class="leaderboard-table">
+    <thead>
+        <tr>
+            <th>Player</th>
+            <th>W</th>
+            <th>D</th>
+            <th>L</th>
+            <th>Score</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for row in leaderboard_rows %}
+        <tr>
+            <td>{{ row.display_name }}</td>
+            <td>{{ row.wins }}</td>
+            <td>{{ row.draws }}</td>
+            <td>{{ row.losses }}</td>
+            <td>{{ row.score }}</td>
+        </tr>
+    {% else %}
+        <tr>
+            <td colspan="5">No games finished yet.</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

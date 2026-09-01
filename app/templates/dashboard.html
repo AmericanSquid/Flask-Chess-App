@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Dashboard · The Court of Crowns & Castles{% endblock %}
+{% block content %}
+<section class="dashboard-grid">
+    <article class="panel">
+        <h1>Dashboard</h1>
+        {% if active_games %}
+            <h2>Saved Games</h2>
+            <ul class="game-list">
+                {% for game in active_games %}
+                    <li>
+                        <a class="button-link" href="{{ url_for('games.view_game', game_id=game.id) }}">
+                          {{ game.white_player.get_display_name() }} vs {{ game.black_player.get_display_name() }}
+                        </a>
+                    </li>
+                    <br>
+                    <br>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No active games yet. Start one below.</p>
+        {% endif %}
+
+        <h2>Start a head-to-head game</h2>
+        <form method="post" action="{{ url_for('games.create_game') }}" class="stack-form">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <label>
+                Opponent
+                <select name="opponent_id" required>
+                    {% for user in opponents %}
+                        <option value="{{ user.id }}">{{ user.get_display_name() }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+            <label>
+                Play as
+                <select name="preferred_color">
+                    <option value="white">White</option>
+                    <option value="black">Black</option>
+                </select>
+            </label>
+            <button type="submit">Start new game</button>
+        </form>
+    </article>
+
+    <aside class="panel" id="leaderboard-panel">
+        <h2>Leaderboard</h2>
+        <div id="leaderboard-body">{% include "partials/leaderboard.html" %}</div>
+    </aside>
+</section>
+{% endblock %}
