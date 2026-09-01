@@ -135,3 +135,8 @@ exposing it to the internet, add real authentication and account management,
 provide a strong secret through the environment, use HTTPS, configure a
 production WSGI server and database, add migrations, and review security
 headers/CSP, rate limiting, validation, observability, and concurrency handling.
+
+## License
+
+This project is licensed under the GNU General Public License, version 3 or
+later. See [LICENSE](LICENSE) for the full license text.

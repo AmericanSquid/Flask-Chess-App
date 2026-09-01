@@ -7,6 +7,10 @@ name = "highly-modular-flask-chess-app"
 version = "0.1.0"
 description = "A modular Flask chess app scaffold using Flask-SQLAlchemy and python-chess"
 requires-python = ">=3.11"
+license = { text = "GPL-3.0-or-later" }
+classifiers = [
+    "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
